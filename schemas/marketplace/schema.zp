@@ -1,0 +1,35 @@
+// ZanziPay Schema — Marketplace Platform
+
+definition user {}
+definition seller {}
+definition buyer {}
+
+definition marketplace {
+    relation admin: user
+    permission manage = admin
+}
+
+definition listing {
+    relation seller:      seller | user
+    relation viewer:      user | buyer
+    relation marketplace: marketplace
+    permission view    = seller + viewer + marketplace->manage
+    permission edit    = seller
+    permission publish = seller + marketplace->manage
+}
+
+definition order {
+    relation buyer:      buyer | user
+    relation seller:     seller | user
+    relation marketplace: marketplace
+    permission view    = buyer + seller + marketplace->manage
+    permission deliver = seller
+    permission refund  = buyer + marketplace->manage
+    permission dispute = buyer + marketplace->manage
+}
+
+definition escrow {
+    relation order: order
+    permission release = order->deliver
+    permission refund  = order->refund
+}

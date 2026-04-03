@@ -1,0 +1,21 @@
+tuples:
+  - resource_type: marketplace
+    resource_id: shopify-clone
+    relation: admin
+    subject_type: user
+    subject_id: marketplace-admin
+  - resource_type: listing
+    resource_id: item-001
+    relation: seller
+    subject_type: user
+    subject_id: seller-alice
+  - resource_type: order
+    resource_id: order-001
+    relation: buyer
+    subject_type: user
+    subject_id: buyer-bob
+  - resource_type: order
+    resource_id: order-001
+    relation: seller
+    subject_type: user
+    subject_id: seller-alice

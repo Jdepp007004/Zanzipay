@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/gen/go/v1;zanzipaypb";
+
+import "v1/zanzipay.proto";
+
+// AuthorizationService is the primary ZanziPay gRPC service.
+service AuthorizationService {
+  rpc Check(CheckRequest)                   returns (CheckResponse);
+  rpc WriteTuples(WriteTuplesRequest)       returns (WriteTuplesResponse);
+  rpc DeleteTuples(DeleteTuplesRequest)     returns (DeleteTuplesResponse);
+  rpc LookupResources(LookupResourcesRequest) returns (LookupResourcesResponse);
+  rpc WriteSchema(WriteSchemaRequest)       returns (WriteSchemaResponse);
+  rpc Health(HealthRequest)                 returns (HealthResponse);
+}

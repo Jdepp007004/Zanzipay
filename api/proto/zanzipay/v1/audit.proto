@@ -1,0 +1,47 @@
+syntax = "proto3";
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/proto/zanzipay/v1;zanzipayv1";
+
+message AuditQueryRequest {
+  string start_time   = 1;
+  string end_time     = 2;
+  string subject_id   = 3;
+  string resource_id  = 4;
+  string verdict      = 5;
+  string client_id    = 6;
+  int32  limit        = 7;
+  string cursor       = 8;
+}
+
+message AuditRecord {
+  string id             = 1;
+  string timestamp      = 2;
+  string subject        = 3;
+  string resource       = 4;
+  string action         = 5;
+  bool   allowed        = 6;
+  string decision_token = 7;
+  string reasoning      = 8;
+  int64  eval_duration_ns = 9;
+}
+
+message AuditQueryResponse {
+  repeated AuditRecord records = 1;
+  string cursor                = 2;
+}
+
+message GenerateReportRequest {
+  string report_type  = 1; // SOX | PCI
+  string start_time   = 2;
+  string end_time     = 3;
+}
+
+message GenerateReportResponse {
+  string report_url = 1;
+  bytes  report_data = 2;
+}
+
+service AuditService {
+  rpc Query(AuditQueryRequest) returns (AuditQueryResponse);
+  rpc GenerateReport(GenerateReportRequest) returns (GenerateReportResponse);
+}

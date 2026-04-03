@@ -1,0 +1,35 @@
+syntax = "proto3";
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/proto/zanzipay/v1;zanzipayv1";
+
+message LookupResourcesRequest {
+  string subject_type   = 1;
+  string subject_id     = 2;
+  string resource_type  = 3;
+  string permission     = 4;
+  string consistency    = 5;
+  int32  limit          = 6;
+}
+
+message LookupResourcesResponse {
+  repeated string resource_ids = 1;
+  string          cursor       = 2;
+}
+
+message LookupSubjectsRequest {
+  string resource_type  = 1;
+  string resource_id    = 2;
+  string permission     = 3;
+  string subject_type   = 4;
+  int32  limit          = 5;
+}
+
+message LookupSubjectsResponse {
+  repeated string subject_ids = 1;
+  string          cursor      = 2;
+}
+
+service LookupService {
+  rpc LookupResources(LookupResourcesRequest) returns (LookupResourcesResponse);
+  rpc LookupSubjects(LookupSubjectsRequest) returns (LookupSubjectsResponse);
+}

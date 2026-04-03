@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/gen/go/v1;zanzipaypb";
+
+// CheckRequest is the input to the authorization check endpoint.
+message CheckRequest {
+  string subject_type     = 1;
+  string subject_id       = 2;
+  string resource_type    = 3;
+  string resource_id      = 4;
+  string permission       = 5;
+  string zookie           = 6;
+  map<string, string> context = 7;
+}
+
+// CheckResponse contains the authorization decision.
+message CheckResponse {
+  bool   allowed         = 1;
+  string verdict         = 2;
+  string decision_token  = 3;
+  string reasoning       = 4;
+  int64  eval_duration_ns = 5;
+}
+
+// WriteTuplesRequest writes relationship tuples.
+message WriteTuplesRequest {
+  repeated Tuple tuples = 1;
+}
+
+message WriteTuplesResponse {
+  string zookie   = 1;
+  int64  revision = 2;
+}
+
+// DeleteTuplesRequest removes relationship tuples.
+message DeleteTuplesRequest {
+  TupleFilter filter = 1;
+}
+
+message DeleteTuplesResponse {
+  int64 revision = 1;
+}
+
+// LookupResourcesRequest finds all resources a subject can access.
+message LookupResourcesRequest {
+  string subject_type  = 1;
+  string subject_id    = 2;
+  string resource_type = 3;
+  string permission    = 4;
+  string zookie        = 5;
+}
+
+message LookupResourcesResponse {
+  repeated string resource_ids = 1;
+}
+
+// WriteSchemaRequest installs a new schema.
+message WriteSchemaRequest {
+  string schema_text = 1;
+}
+message WriteSchemaResponse {
+  string version = 1;
+}
+
+// HealthRequest / HealthResponse for liveness probes.
+message HealthRequest {}
+message HealthResponse {
+  string status  = 1;
+  string version = 2;
+}
+
+// Shared sub-messages.
+message Tuple {
+  string resource_type     = 1;
+  string resource_id       = 2;
+  string relation          = 3;
+  string subject_type      = 4;
+  string subject_id        = 5;
+  string subject_relation  = 6;
+  string caveat_name       = 7;
+  map<string, string> caveat_context = 8;
+}
+
+message TupleFilter {
+  string resource_type  = 1;
+  string resource_id    = 2;
+  string relation       = 3;
+  string subject_type   = 4;
+  string subject_id     = 5;
+}

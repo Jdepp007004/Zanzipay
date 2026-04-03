@@ -1,0 +1,43 @@
+syntax = "proto3";
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/proto/zanzipay/v1;zanzipayv1";
+
+message ComplianceCheckRequest {
+  string subject_type = 1;
+  string subject_id   = 2;
+  string resource_type = 3;
+  string resource_id  = 4;
+  string action       = 5;
+  map<string,string> context = 6;
+}
+
+message ComplianceCheckResponse {
+  bool   allowed      = 1;
+  repeated string violations = 2;
+  double risk_score   = 3;
+}
+
+message FreezeAccountRequest {
+  string account_id = 1;
+  string reason     = 2;
+  string authority  = 3;
+}
+
+message FreezeAccountResponse {
+  bool success = 1;
+}
+
+message UnfreezeAccountRequest {
+  string account_id = 1;
+  string authority  = 2;
+}
+
+message UnfreezeAccountResponse {
+  bool success = 1;
+}
+
+service ComplianceService {
+  rpc Check(ComplianceCheckRequest) returns (ComplianceCheckResponse);
+  rpc FreezeAccount(FreezeAccountRequest) returns (FreezeAccountResponse);
+  rpc UnfreezeAccount(UnfreezeAccountRequest) returns (UnfreezeAccountResponse);
+}

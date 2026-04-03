@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zanzipay
+  namespace: zanzipay
+spec:
+  type: ClusterIP
+  selector:
+    app: zanzipay
+  ports:
+    - name: grpc
+      port: 50053
+      targetPort: grpc
+    - name: rest
+      port: 8090
+      targetPort: rest
+    - name: metrics
+      port: 9090
+      targetPort: metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zanzipay-grpc-lb
+  namespace: zanzipay
+spec:
+  type: LoadBalancer
+  selector:
+    app: zanzipay
+  ports:
+    - name: grpc
+      port: 50053
+      targetPort: grpc
+    - name: rest
+      port: 8090
+      targetPort: rest

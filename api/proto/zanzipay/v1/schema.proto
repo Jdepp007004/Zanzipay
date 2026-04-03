@@ -1,0 +1,34 @@
+syntax = "proto3";
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/proto/zanzipay/v1;zanzipayv1";
+
+message WriteSchemaRequest {
+  string schema = 1;
+}
+
+message WriteSchemaResponse {
+  string version = 1;
+  repeated string errors = 2;
+}
+
+message ReadSchemaRequest {}
+
+message ReadSchemaResponse {
+  string schema  = 1;
+  string version = 2;
+}
+
+message ValidateSchemaRequest {
+  string schema = 1;
+}
+
+message ValidateSchemaResponse {
+  bool   valid   = 1;
+  repeated string errors = 2;
+}
+
+service SchemaService {
+  rpc WriteSchema(WriteSchemaRequest) returns (WriteSchemaResponse);
+  rpc ReadSchema(ReadSchemaRequest) returns (ReadSchemaResponse);
+  rpc ValidateSchema(ValidateSchemaRequest) returns (ValidateSchemaResponse);
+}

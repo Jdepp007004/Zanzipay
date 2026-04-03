@@ -1,0 +1,37 @@
+tuples:
+  - resource_type: team
+    resource_id: payments-eng
+    relation: member
+    subject_type: user
+    subject_id: alice
+  - resource_type: team
+    resource_id: payments-eng
+    relation: admin
+    subject_type: user
+    subject_id: bob
+  - resource_type: merchant
+    resource_id: acme-corp
+    relation: owner
+    subject_type: user
+    subject_id: alice
+  - resource_type: merchant
+    resource_id: acme-corp
+    relation: operator
+    subject_type: team
+    subject_id: payments-eng
+    subject_relation: member
+  - resource_type: account
+    resource_id: acme-main
+    relation: merchant
+    subject_type: merchant
+    subject_id: acme-corp
+  - resource_type: payment_intent
+    resource_id: pi_001
+    relation: account
+    subject_type: account
+    subject_id: acme-main
+  - resource_type: payment_intent
+    resource_id: pi_001
+    relation: initiator
+    subject_type: user
+    subject_id: alice

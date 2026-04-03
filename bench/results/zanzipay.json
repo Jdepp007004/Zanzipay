@@ -1,0 +1,62 @@
+[
+  {
+    "system": "ZanziPay",
+    "scenario": "simple_check",
+    "p50_ms": 0.063038,
+    "p95_ms": 0.902654,
+    "p99_ms": 2.433648,
+    "throughput_rps": 212856,
+    "error_rate": 0,
+    "operations": 2136359,
+    "concurrency": 50,
+    "duration_ns": 10036620049
+  },
+  {
+    "system": "ZanziPay",
+    "scenario": "denied_check",
+    "p50_ms": 0.221483,
+    "p95_ms": 1.973348,
+    "p99_ms": 5.698617,
+    "throughput_rps": 83974,
+    "error_rate": 0,
+    "operations": 839804,
+    "concurrency": 50,
+    "duration_ns": 10000725994
+  },
+  {
+    "system": "ZanziPay",
+    "scenario": "nested_group_check",
+    "p50_ms": 0.153652,
+    "p95_ms": 1.335172,
+    "p99_ms": 4.066118,
+    "throughput_rps": 119955,
+    "error_rate": 0,
+    "operations": 1199605,
+    "concurrency": 50,
+    "duration_ns": 10000456176
+  },
+  {
+    "system": "ZanziPay",
+    "scenario": "high_concurrency",
+    "p50_ms": 0.149451,
+    "p95_ms": 1.289588,
+    "p99_ms": 4.109949,
+    "throughput_rps": 121004,
+    "error_rate": 0,
+    "operations": 1210177,
+    "concurrency": 50,
+    "duration_ns": 10001059855
+  },
+  {
+    "system": "ZanziPay",
+    "scenario": "compliance_check",
+    "p50_ms": 0.153645,
+    "p95_ms": 1.567298,
+    "p99_ms": 5.811706,
+    "throughput_rps": 106314,
+    "error_rate": 0,
+    "operations": 1063199,
+    "concurrency": 50,
+    "duration_ns": 10000545125
+  }
+]

@@ -1,0 +1,80 @@
+openapi: 3.1.0
+info:
+  title: ZanziPay Authorization API
+  version: 1.0.0
+  description: Zanzibar-derived authorization system for fintech platforms
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: http://localhost:8090
+    description: Local development
+
+paths:
+  /v1/check:
+    post:
+      operationId: check
+      summary: Perform a permission check
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckRequest'
+      responses:
+        '200':
+          description: Check result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResponse'
+
+  /v1/tuples:
+    post:
+      operationId: writeTuples
+      summary: Write relationship tuples
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WriteTuplesRequest'
+      responses:
+        '200':
+          description: Write result
+
+components:
+  schemas:
+    CheckRequest:
+      type: object
+      properties:
+        resource_type: { type: string }
+        resource_id:   { type: string }
+        permission:    { type: string }
+        subject_type:  { type: string }
+        subject_id:    { type: string }
+        consistency:   { type: string, enum: [minimize_latency, at_least_as_fresh, fully_consistent] }
+    CheckResponse:
+      type: object
+      properties:
+        allowed:        { type: boolean }
+        verdict:        { type: string }
+        decision_token: { type: string }
+        reasoning:      { type: string }
+    WriteTuplesRequest:
+      type: object
+      properties:
+        tuples:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tuple'
+    Tuple:
+      type: object
+      properties:
+        resource_type:    { type: string }
+        resource_id:      { type: string }
+        relation:         { type: string }
+        subject_type:     { type: string }
+        subject_id:       { type: string }
+        subject_relation: { type: string }

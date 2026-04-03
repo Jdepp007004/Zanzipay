@@ -1,0 +1,58 @@
+// ZanziPay Schema — Stripe-like Payment Platform
+// caveat definitions
+caveat amount_limit(max_amount: int) {
+    context.transfer_amount <= max_amount
+}
+caveat kyc_verified() {
+    context.kyc_status == "verified"
+}
+caveat business_hours_only() {
+    context.is_business_hours == true
+}
+
+definition user {}
+
+definition team {
+    relation member: user
+    relation admin:  user
+    permission access = admin + member
+}
+
+definition platform {
+    relation admin: user | team#member
+    permission platform_admin = admin
+}
+
+definition merchant {
+    relation owner:    user | team#member
+    relation admin:    user | team#member
+    relation operator: user | team#member
+    relation viewer:   user
+    relation platform: platform
+    permission manage   = owner + admin
+    permission operate  = manage + operator
+    permission view     = operate + viewer
+}
+
+definition account {
+    relation merchant: merchant
+    relation owner:    user | team#member
+    relation admin:    user | team#member
+    relation viewer:   user
+    permission manage          = owner + admin + merchant->manage
+    permission view            = manage + viewer + merchant->view
+    permission initiate_payout = owner with kyc_verified + admin with kyc_verified
+}
+
+definition payment_intent {
+    relation account:   account
+    relation initiator: user
+    permission view    = account->view + initiator
+    permission capture = account->manage + initiator with amount_limit
+    permission refund  = account->manage
+}
+
+definition api_key {
+    relation owner: user | merchant
+    permission use = owner
+}

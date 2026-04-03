@@ -1,0 +1,57 @@
+// ZanziPay Schema — Core Banking Platform
+
+caveat requires_mfa() {
+    context.mfa_verified == true
+}
+caveat daily_limit(limit_usd: int) {
+    context.daily_spent_usd + context.transfer_amount_usd <= limit_usd
+}
+caveat regulatory_hold() {
+    context.regulatory_hold == false
+}
+
+definition user {}
+definition compliance_officer {}
+definition regulator {}
+
+definition bank {
+    relation admin:      user
+    relation compliance: compliance_officer
+    relation regulator:  regulator
+    permission manage = admin
+    permission audit  = manage + compliance + regulator
+}
+
+definition customer {
+    relation owner: user
+    relation joint: user
+    relation bank:  bank
+    permission view   = owner + joint + bank->audit
+    permission manage = owner + bank->manage
+}
+
+definition account {
+    relation customer:  customer
+    relation bank:      bank
+    relation frozen_by: compliance_officer
+    permission view     = customer->view + bank->audit
+    permission debit    = customer->manage with requires_mfa with regulatory_hold
+    permission credit   = customer->manage with regulatory_hold
+    permission close    = bank->manage
+    permission freeze   = bank->compliance
+    permission unfreeze = bank->compliance + frozen_by
+}
+
+definition transaction {
+    relation account:   account
+    relation initiator: user
+    permission view    = account->view + initiator
+    permission approve = account->debit with daily_limit
+    permission reverse = account->bank->compliance
+}
+
+definition report {
+    relation bank: bank
+    permission generate = bank->compliance + bank->regulator
+    permission view     = bank->audit
+}

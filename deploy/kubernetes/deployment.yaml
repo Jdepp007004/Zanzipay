@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zanzipay
+  namespace: zanzipay
+  labels:
+    app: zanzipay
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: zanzipay
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: zanzipay
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+        - name: zanzipay
+          image: zanzipay/server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50053
+              name: grpc
+            - containerPort: 8090
+              name: rest
+            - containerPort: 9090
+              name: metrics
+          env:
+            - name: ZANZIPAY_STORAGE_ENGINE
+              value: postgres
+            - name: ZANZIPAY_POSTGRES_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: zanzipay-secrets
+                  key: postgres-dsn
+            - name: ZANZIPAY_HMAC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: zanzipay-secrets
+                  key: hmac-key
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: rest
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: rest
+            initialDelaySeconds: 3
+            periodSeconds: 5

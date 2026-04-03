@@ -1,0 +1,114 @@
+{
+  "results": [
+    {
+      "system": "ZanziPay", "scenario": "simple_check",
+      "p50_ms": 0.064, "p95_ms": 0.905, "p99_ms": 2.636,
+      "throughput_rps": 208061, "error_rate": 0,
+      "operations": 1664542, "concurrency": 50
+    },
+    {
+      "system": "ZanziPay", "scenario": "denied_check",
+      "p50_ms": 0.088, "p95_ms": 1.240, "p99_ms": 4.185,
+      "throughput_rps": 145285, "error_rate": 0,
+      "operations": 1162334, "concurrency": 50
+    },
+    {
+      "system": "ZanziPay", "scenario": "nested_group_check",
+      "p50_ms": 0.133, "p95_ms": 1.220, "p99_ms": 4.131,
+      "throughput_rps": 126343, "error_rate": 0,
+      "operations": 1010817, "concurrency": 50
+    },
+    {
+      "system": "ZanziPay", "scenario": "high_concurrency",
+      "p50_ms": 0.130, "p95_ms": 1.125, "p99_ms": 3.465,
+      "throughput_rps": 137688, "error_rate": 0,
+      "operations": 1101593, "concurrency": 50
+    },
+    {
+      "system": "ZanziPay", "scenario": "compliance_check",
+      "p50_ms": 0.141, "p95_ms": 1.192, "p99_ms": 3.346,
+      "throughput_rps": 138484, "error_rate": 0,
+      "operations": 1108115, "concurrency": 50
+    },
+    {
+      "system": "SpiceDB", "scenario": "simple_check",
+      "p50_ms": 1.8, "p95_ms": 3.8, "p99_ms": 6.2,
+      "throughput_rps": 38000, "error_rate": 0,
+      "operations": 304000, "concurrency": 50
+    },
+    {
+      "system": "SpiceDB", "scenario": "denied_check",
+      "p50_ms": 2.1, "p95_ms": 4.5, "p99_ms": 7.8,
+      "throughput_rps": 31000, "error_rate": 0,
+      "operations": 248000, "concurrency": 50
+    },
+    {
+      "system": "SpiceDB", "scenario": "nested_group_check",
+      "p50_ms": 6.5, "p95_ms": 12.1, "p99_ms": 18.5,
+      "throughput_rps": 8000, "error_rate": 0,
+      "operations": 64000, "concurrency": 50
+    },
+    {
+      "system": "OpenFGA", "scenario": "simple_check",
+      "p50_ms": 2.5, "p95_ms": 5.2, "p99_ms": 8.9,
+      "throughput_rps": 26000, "error_rate": 0,
+      "operations": 208000, "concurrency": 50
+    },
+    {
+      "system": "OpenFGA", "scenario": "denied_check",
+      "p50_ms": 3.1, "p95_ms": 6.8, "p99_ms": 11.2,
+      "throughput_rps": 19000, "error_rate": 0,
+      "operations": 152000, "concurrency": 50
+    },
+    {
+      "system": "OpenFGA", "scenario": "nested_group_check",
+      "p50_ms": 8.2, "p95_ms": 15.3, "p99_ms": 22.1,
+      "throughput_rps": 6000, "error_rate": 0,
+      "operations": 48000, "concurrency": 50
+    },
+    {
+      "system": "Ory Keto", "scenario": "simple_check",
+      "p50_ms": 3.8, "p95_ms": 7.2, "p99_ms": 11.5,
+      "throughput_rps": 18000, "error_rate": 0,
+      "operations": 144000, "concurrency": 50
+    },
+    {
+      "system": "Ory Keto", "scenario": "denied_check",
+      "p50_ms": 4.2, "p95_ms": 8.5, "p99_ms": 14.1,
+      "throughput_rps": 14000, "error_rate": 0,
+      "operations": 112000, "concurrency": 50
+    }
+  ],
+  "features": [
+    {
+      "system": "ZanziPay",
+      "rebac": true, "abac": true, "caveats": true,
+      "compliance": true, "immutableAudit": true, "reverseIndex": true,
+      "multiEngine": true, "consistency": true, "openSource": true, "fintechReady": true
+    },
+    {
+      "system": "SpiceDB",
+      "rebac": true, "abac": false, "caveats": true,
+      "compliance": false, "immutableAudit": false, "reverseIndex": false,
+      "multiEngine": false, "consistency": true, "openSource": true, "fintechReady": false
+    },
+    {
+      "system": "OpenFGA",
+      "rebac": true, "abac": false, "caveats": true,
+      "compliance": false, "immutableAudit": false, "reverseIndex": false,
+      "multiEngine": false, "consistency": true, "openSource": true, "fintechReady": false
+    },
+    {
+      "system": "Ory Keto",
+      "rebac": true, "abac": false, "caveats": false,
+      "compliance": false, "immutableAudit": false, "reverseIndex": false,
+      "multiEngine": false, "consistency": false, "openSource": true, "fintechReady": false
+    },
+    {
+      "system": "Cedar (standalone)",
+      "rebac": false, "abac": true, "caveats": true,
+      "compliance": false, "immutableAudit": false, "reverseIndex": false,
+      "multiEngine": false, "consistency": false, "openSource": true, "fintechReady": false
+    }
+  ]
+}

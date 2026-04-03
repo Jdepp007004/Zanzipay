@@ -1,0 +1,21 @@
+tuples:
+  - resource_type: bank
+    resource_id: first-national
+    relation: admin
+    subject_type: user
+    subject_id: bank-admin
+  - resource_type: customer
+    resource_id: customer-001
+    relation: owner
+    subject_type: user
+    subject_id: alice
+  - resource_type: account
+    resource_id: checking-001
+    relation: customer
+    subject_type: customer
+    subject_id: customer-001
+  - resource_type: account
+    resource_id: checking-001
+    relation: bank
+    subject_type: bank
+    subject_id: first-national

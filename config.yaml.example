@@ -1,0 +1,49 @@
+server:
+  grpc_port: 50053
+  rest_port: 8090
+  max_connections: 1000
+  request_timeout: 100ms
+  # Comma-separated API keys. Change these before deploying.
+  api_keys:
+    - "your-api-key-here"
+
+storage:
+  # Options: memory | postgres
+  engine: memory
+  postgres:
+    dsn: "postgres://zanzipay:password@localhost:5432/zanzipay?sslmode=disable"
+    max_connections: 50
+    query_timeout: 30ms
+
+policy:
+  auto_analyze: true
+  evaluation_timeout: 20ms
+  cache_compiled_policies: true
+  caveat_timeout: 10ms
+
+compliance:
+  # Consistency level: minimize_latency | at_least_as_fresh | fully_consistent
+  consistency: minimize_latency
+  sanctions_update_interval: 24h
+  kyc_cache_ttl: 5m
+  freeze_check_enabled: true
+
+index:
+  enabled: true
+  full_rebuild_interval: 6h
+  bitmap_shard_count: 16
+
+audit:
+  buffer_size: 10000
+  flush_interval: 1s
+  # Days to retain audit records (2555 = 7 years, required by SOX)
+  retention_days: 2555
+  immutable: true
+
+metrics:
+  prometheus_port: 9090
+  enabled: true
+
+# HMAC key for signing zookies and decision tokens.
+# Must be at least 32 characters. Generate with: openssl rand -hex 32
+hmac_key: "changeme-replace-with-32-char-secret-key!"

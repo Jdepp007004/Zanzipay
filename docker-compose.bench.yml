@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  zanzipay-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: zanzipay_bench
+      POSTGRES_USER: zanzipay
+      POSTGRES_PASSWORD: bench_password
+    ports: ["5432:5432"]
+    volumes: [zanzipay-pg-data:/var/lib/postgresql/data]
+  spicedb:
+    image: authzed/spicedb:latest
+    command: serve --grpc-preshared-key bench_token --datastore-engine memory
+    ports: ["50051:50051"]
+  openfga:
+    image: openfga/openfga:latest
+    command: run
+    ports: ["8080:8080","8081:8081"]
+  keto:
+    image: oryd/keto:v0.12
+    command: serve -c /etc/keto/keto.yml
+    ports: ["4466:4466","4467:4467"]
+    volumes: [./bench/config/keto.yml:/etc/keto/keto.yml]
+volumes:
+  zanzipay-pg-data:

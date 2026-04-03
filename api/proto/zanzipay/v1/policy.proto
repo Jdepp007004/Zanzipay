@@ -1,0 +1,51 @@
+syntax = "proto3";
+package zanzipay.v1;
+option go_package = "github.com/youorg/zanzipay/api/proto/zanzipay/v1;zanzipayv1";
+
+message PolicyEvalRequest {
+  string principal_type = 1;
+  string principal_id   = 2;
+  string action         = 3;
+  string resource_type  = 4;
+  string resource_id    = 5;
+  map<string,string> context = 6;
+}
+
+message PolicyEvalResponse {
+  bool   allowed          = 1;
+  repeated string matched_policies = 2;
+  string denied_by        = 3;
+  int64  eval_duration_ns = 4;
+}
+
+message DeployPoliciesRequest {
+  string policies = 1; // Cedar policy source
+}
+
+message DeployPoliciesResponse {
+  string version  = 1;
+  repeated string warnings = 2;
+}
+
+message AnalyzePoliciesRequest {
+  string policies = 1;
+}
+
+message AnalyzePoliciesResponse {
+  bool   satisfiable        = 1;
+  repeated string unreachable = 2;
+  repeated string conflicts   = 3;
+}
+
+service PolicyService {
+  rpc Evaluate(PolicyEvalRequest) returns (PolicyEvalResponse);
+  rpc Deploy(DeployPoliciesRequest) returns (DeployPoliciesResponse);
+  rpc Analyze(AnalyzePoliciesRequest) returns (AnalyzePoliciesResponse);
+  rpc GetPolicies(GetPoliciesRequest) returns (GetPoliciesResponse);
+}
+
+message GetPoliciesRequest {}
+message GetPoliciesResponse {
+  string policies = 1;
+  string version  = 2;
+}

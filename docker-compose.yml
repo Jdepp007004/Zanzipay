@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: zanzipay
+      POSTGRES_USER: zanzipay
+      POSTGRES_PASSWORD: password
+    ports: ["5432:5432"]
+    volumes: [zanzipay-pg-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zanzipay"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  zanzipay:
+    build: { context: ., dockerfile: deploy/docker/Dockerfile }
+    ports: ["50053:50053","8090:8090","9090:9090"]
+    environment:
+      - ZANZIPAY_STORAGE_ENGINE=postgres
+      - ZANZIPAY_POSTGRES_DSN=postgres://zanzipay:password@postgres:5432/zanzipay?sslmode=disable
+      - ZANZIPAY_HMAC_KEY=local-dev-hmac-key-32-bytes-long!!
+    depends_on: { postgres: { condition: service_healthy } }
+volumes:
+  zanzipay-pg-data:

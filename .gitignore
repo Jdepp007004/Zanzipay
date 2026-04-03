@@ -1,0 +1,70 @@
+# Binaries
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+zanzipay-server
+zanzipay-bench
+zanzipay-cli
+
+# Go build + test artifacts
+*.test
+*.out
+coverage.out
+cpu.prof
+mem.prof
+
+# Go build cache (CI uses explicit GOCACHE)
+/tmp/
+
+# Proto-generated files (regenerate with: bash scripts/generate-proto.sh)
+api/proto/**/*.pb.go
+api/proto/**/*_grpc.pb.go
+api/proto/**/*.pb.gw.go
+
+# Config — NEVER commit real config with secrets
+config.yaml
+!config.yaml.example
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+bench/analysis/.venv/
+bench/analysis/venv/
+
+# Benchmark outputs (raw HTML reports, keep JSON)
+bench/results/*.html
+
+# Frontend build output
+frontend/dist/
+frontend/node_modules/
+
+# Generated frontend data (built by bench run)
+frontend/src/data/results.json
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Docker
+.dockerignore
+
+# Terraform state (never commit — contains secrets)
+deploy/terraform/*.tfstate
+deploy/terraform/*.tfstate.*
+deploy/terraform/.terraform/
+deploy/terraform/.terraform.lock.hcl
+
+# Vendor (we use go modules, not vendor)
+vendor/
