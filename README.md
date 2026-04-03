@@ -6,7 +6,7 @@
 
 [![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?style=flat&logo=go)](https://go.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![CI](https://github.com/Jdepp007004/Zanzipay/actions/workflows/ci.yml/badge.svg)https://github.com/Jdepp007004/Zanzipay/actions/workflows/ci.yml)
+[![CI](https://github.com/Jdepp007004/Zanzipay/actions/workflows/ci.yml/badge.svg)](https://github.com/Jdepp007004/Zanzipay/actions/workflows/ci.yml)
 
 ---
 
