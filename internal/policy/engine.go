@@ -187,28 +187,62 @@ func (ce *CedarEvaluator) IsAuthorized(_ context.Context, req CedarRequest) (*Ce
 	return resp, nil
 }
 
+// policyMatchesScope checks whether a policy's principal/action scope matches the request.
+// FIX: action matching now uses exact equality after extracting the action name,
+// so a policy scoped to "transfer" no longer incorrectly matches "large_transfer".
 func policyMatchesScope(p CedarPolicy, req CedarRequest) bool {
+	// Principal check — "principal" is the Cedar wildcard.
 	if p.Principal != "principal" && p.Principal != "" {
 		if !strings.Contains(p.Principal, req.PrincipalType) {
 			return false
 		}
 	}
+
+	// Action check — extract the concrete action name from the policy expression,
+	// then require exact equality with the request action.
 	if p.Action != "action" && p.Action != "" {
-		if !strings.Contains(p.Action, req.Action) && !strings.Contains(req.Action, extractActionName(p.Action)) {
-			return false
+		policyAction := extractActionName(p.Action)
+		// Support both bare names ("transfer") and Action::"transfer" Cedar syntax.
+		// The extracted name must equal the request action exactly — no substring matching.
+		if policyAction != req.Action {
+			// Secondary: if the raw policy action string is just the bare name, also check that.
+			rawTrimmed := strings.TrimSpace(p.Action)
+			if rawTrimmed != req.Action {
+				return false
+			}
 		}
 	}
+
 	return true
 }
 
+// extractActionName pulls the concrete name out of Cedar action expressions.
+// Handles: Action::"transfer"  →  "transfer"
+//          action == "transfer" →  "transfer"
+//          transfer             →  "transfer"
 func extractActionName(actionExpr string) string {
-	if idx := strings.Index(actionExpr, `::"`); idx != -1 {
-		s := actionExpr[idx+3:]
-		if end := strings.Index(s, `"`); end != -1 {
-			return s[:end]
-		}
+	actionExpr = strings.TrimSpace(actionExpr)
+
+	// Cedar namespace syntax: Action::"transfer" or Action == Action::"transfer"
+	if idx := strings.Index(actionExpr, `::""`); idx != -1 {
+		// empty action literal — return as-is
+		return actionExpr
 	}
-	return actionExpr
+	if idx := strings.Index(actionExpr, `::`); idx != -1 {
+		after := actionExpr[idx+2:]
+		// strip surrounding quotes
+		after = strings.Trim(after, `"`)
+		return after
+	}
+
+	// action == "transfer"
+	if idx := strings.Index(actionExpr, "=="); idx != -1 {
+		right := strings.TrimSpace(actionExpr[idx+2:])
+		return strings.Trim(right, `"`)
+	}
+
+	// bare name
+	return strings.Trim(actionExpr, `"`)
 }
 
 func evalConditions(conditions []string, ctx map[string]interface{}) bool {
@@ -220,6 +254,7 @@ func evalConditions(conditions []string, ctx map[string]interface{}) bool {
 	return true
 }
 
+// evalSingleCondition delegates to the full ABAC evaluator in abac.go.
 func evalSingleCondition(cond string, ctx map[string]interface{}) bool {
 	return EvalCondition(cond, ctx)
 }
