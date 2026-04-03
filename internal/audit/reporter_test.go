@@ -33,7 +33,7 @@ func TestGenerateReport(t *testing.T) {
 func TestGenerateSOXReport(t *testing.T) {
 	now := time.Now()
 	records := []storage.DecisionRecord{
-		{Timestamp: now, Allowed: true},
+		{Timestamp: now, Allowed: true, DecisionToken: "mock-token"},
 	}
 	report := GenerateSOXReport(records, now.Add(-1*time.Hour), now.Add(1*time.Hour))
 	if report.ComplianceScore != 100.0 {
